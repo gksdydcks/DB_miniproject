@@ -29,7 +29,7 @@ int main() {
     WSADATA wsaData;
     SOCKET clientSocket;
     SOCKADDR_IN serverAddr;
-    std::vector<char> buffer(2048);  // 넉넉하게 확보
+    std::vector<char> buffer(2048);
 
     WSAStartup(MAKEWORD(2, 2), &wsaData);
     clientSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -112,17 +112,26 @@ int main() {
                                 }
                             }
                         }
-                        else if (sub == 2) {
+                        else if (sub == 2) {  // 로그아웃
+                            std::string logoutMsg = "exit";
+                            send(clientSocket, logoutMsg.c_str(), logoutMsg.length(), 0);
+
+                            int outRecv = recv(clientSocket, buffer.data(), buffer.size(), 0);
+                            if (outRecv > 0) {
+                                // 응답 무시하고 고정 메시지 출력
+                                std::wcout << L"[서버 응답] 로그아웃\n";
+                            }
+
+                            login = false;
+                        }
+                        else if (sub == 3) {  // 완전 종료
                             std::string logoutMsg = "exit";
                             send(clientSocket, logoutMsg.c_str(), logoutMsg.length(), 0);
                             int outRecv = recv(clientSocket, buffer.data(), buffer.size(), 0);
                             if (outRecv > 0) {
-                                std::string bye(buffer.data(), outRecv);
-                                std::wcout << L"[서버 응답] " << utf8ToWstring(bye) << L"\n";
+                                std::wcout << L"[서버 응답] 로그아웃\n";
                             }
                             login = false;
-                        }
-                        else if (sub == 3) {
                             running = false;
                             break;
                         }
