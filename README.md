@@ -26,3 +26,23 @@
 _setmode(_fileno(stdout), _O_U16TEXT);
 _setmode(_fileno(stdin), _O_U16TEXT);
 ```
+### 강제 변환 → 위 작업으로도 변환 안될때 실행
+
+- 유니코드 → UTF-8 (std::wstring → std::string)
+
+```cpp
+std::string wideToUtf8(const std::wstring& wstr) {
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+    return conv.to_bytes(wstr);
+}
+
+```
+
+- UTF-8 → 유니코드 (std::string → std::wstring)
+```cpp
+std::wstring utf8ToWstring(const std::string& str) {
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+    return conv.from_bytes(str);
+}
+
+```
