@@ -26,7 +26,7 @@
 _setmode(_fileno(stdout), _O_U16TEXT);
 _setmode(_fileno(stdin), _O_U16TEXT);
 ```
-### 강제 변환 → 위 작업으로도 변환 안될때 실행
+### 강제 변환 → 위 작업으로도 변환 안될때 입력
 
 - 유니코드 → UTF-8 (std::wstring → std::string)
 
